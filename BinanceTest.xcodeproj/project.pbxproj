@@ -12,9 +12,13 @@
 		C111440A239D39B7009854A8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C1114408239D39B7009854A8 /* Main.storyboard */; };
 		C111440C239D39B8009854A8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C111440B239D39B8009854A8 /* Assets.xcassets */; };
 		C111440F239D39B8009854A8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C111440D239D39B8009854A8 /* LaunchScreen.storyboard */; };
+		F4D053A75AC0556FA35A5A11 /* Pods_BinanceTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E4B83043DAE58C1BFA0D00D /* Pods_BinanceTest.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1334EE57CC63FA96FE7E5F81 /* Pods-BinanceTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BinanceTest.debug.xcconfig"; path = "Target Support Files/Pods-BinanceTest/Pods-BinanceTest.debug.xcconfig"; sourceTree = "<group>"; };
+		4C8EEF343E5F43AB601AEC76 /* Pods-BinanceTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BinanceTest.release.xcconfig"; path = "Target Support Files/Pods-BinanceTest/Pods-BinanceTest.release.xcconfig"; sourceTree = "<group>"; };
+		7E4B83043DAE58C1BFA0D00D /* Pods_BinanceTest.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BinanceTest.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1114401239D39B7009854A8 /* BinanceTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BinanceTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C1114404239D39B7009854A8 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C1114406239D39B7009854A8 /* TradingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradingViewController.swift; sourceTree = "<group>"; };
@@ -29,17 +33,38 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F4D053A75AC0556FA35A5A11 /* Pods_BinanceTest.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2A586E26C91293994DC8FFC6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				1334EE57CC63FA96FE7E5F81 /* Pods-BinanceTest.debug.xcconfig */,
+				4C8EEF343E5F43AB601AEC76 /* Pods-BinanceTest.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		9CABC3807D4A508AE56148B2 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7E4B83043DAE58C1BFA0D00D /* Pods_BinanceTest.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		C11143F8239D39B7009854A8 = {
 			isa = PBXGroup;
 			children = (
 				C1114403239D39B7009854A8 /* BinanceTest */,
 				C1114402239D39B7009854A8 /* Products */,
+				2A586E26C91293994DC8FFC6 /* Pods */,
+				9CABC3807D4A508AE56148B2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -71,9 +96,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C1114413239D39B8009854A8 /* Build configuration list for PBXNativeTarget "BinanceTest" */;
 			buildPhases = (
+				26CF4A06C659B0500436D1A2 /* [CP] Check Pods Manifest.lock */,
 				C11143FD239D39B7009854A8 /* Sources */,
 				C11143FE239D39B7009854A8 /* Frameworks */,
 				C11143FF239D39B7009854A8 /* Resources */,
+				6411137B77FFDE06890AD64F /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -129,6 +156,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		26CF4A06C659B0500436D1A2 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-BinanceTest-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		6411137B77FFDE06890AD64F /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BinanceTest/Pods-BinanceTest-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-BinanceTest/Pods-BinanceTest-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-BinanceTest/Pods-BinanceTest-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C11143FD239D39B7009854A8 /* Sources */ = {
@@ -280,6 +349,7 @@
 		};
 		C1114414239D39B8009854A8 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1334EE57CC63FA96FE7E5F81 /* Pods-BinanceTest.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
@@ -298,6 +368,7 @@
 		};
 		C1114415239D39B8009854A8 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4C8EEF343E5F43AB601AEC76 /* Pods-BinanceTest.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;

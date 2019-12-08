@@ -15,6 +15,10 @@
 		C1FBAF6E239D3CB8005A70B8 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FBAF6D239D3CB8005A70B8 /* Model.swift */; };
 		C1FBAF70239D4617005A70B8 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FBAF6F239D4617005A70B8 /* ArrayExtension.swift */; };
 		C1FBAF72239D4A28005A70B8 /* TradingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FBAF71239D4A28005A70B8 /* TradingViewModel.swift */; };
+		C1FBAF74239D4E30005A70B8 /* UIView+Constrains.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FBAF73239D4E30005A70B8 /* UIView+Constrains.swift */; };
+		C1FBAF76239D4EC8005A70B8 /* NSObject+ClassName.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FBAF75239D4EC8005A70B8 /* NSObject+ClassName.swift */; };
+		C1FBAF78239D4F17005A70B8 /* TradingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FBAF77239D4F17005A70B8 /* TradingCollectionViewCell.swift */; };
+		C1FBAF81239D55AF005A70B8 /* UICollectionViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FBAF80239D55AF005A70B8 /* UICollectionViewExtension.swift */; };
 		F4D053A75AC0556FA35A5A11 /* Pods_BinanceTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E4B83043DAE58C1BFA0D00D /* Pods_BinanceTest.framework */; };
 /* End PBXBuildFile section */
 
@@ -32,6 +36,10 @@
 		C1FBAF6D239D3CB8005A70B8 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		C1FBAF6F239D4617005A70B8 /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
 		C1FBAF71239D4A28005A70B8 /* TradingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradingViewModel.swift; sourceTree = "<group>"; };
+		C1FBAF73239D4E30005A70B8 /* UIView+Constrains.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Constrains.swift"; sourceTree = "<group>"; };
+		C1FBAF75239D4EC8005A70B8 /* NSObject+ClassName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+ClassName.swift"; sourceTree = "<group>"; };
+		C1FBAF77239D4F17005A70B8 /* TradingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradingCollectionViewCell.swift; sourceTree = "<group>"; };
+		C1FBAF80239D55AF005A70B8 /* UICollectionViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewExtension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,16 +93,76 @@
 			isa = PBXGroup;
 			children = (
 				C1114404239D39B7009854A8 /* AppDelegate.swift */,
-				C1114406239D39B7009854A8 /* TradingViewController.swift */,
-				C1FBAF71239D4A28005A70B8 /* TradingViewModel.swift */,
-				C1FBAF6D239D3CB8005A70B8 /* Model.swift */,
-				C1FBAF6F239D4617005A70B8 /* ArrayExtension.swift */,
-				C1114408239D39B7009854A8 /* Main.storyboard */,
+				C1FBAF7F239D4F75005A70B8 /* Storyboard */,
+				C1FBAF7D239D4F4E005A70B8 /* Extension */,
+				C1FBAF7C239D4F3E005A70B8 /* ViewController */,
+				C1FBAF7B239D4F37005A70B8 /* ViewModel */,
+				C1FBAF7A239D4F28005A70B8 /* View */,
+				C1FBAF7E239D4F5B005A70B8 /* Model */,
 				C111440B239D39B8009854A8 /* Assets.xcassets */,
-				C111440D239D39B8009854A8 /* LaunchScreen.storyboard */,
 				C1114410239D39B8009854A8 /* Info.plist */,
 			);
 			path = BinanceTest;
+			sourceTree = "<group>";
+		};
+		C1FBAF79239D4F20005A70B8 /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				C1FBAF77239D4F17005A70B8 /* TradingCollectionViewCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		C1FBAF7A239D4F28005A70B8 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				C1FBAF79239D4F20005A70B8 /* Cell */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		C1FBAF7B239D4F37005A70B8 /* ViewModel */ = {
+			isa = PBXGroup;
+			children = (
+				C1FBAF71239D4A28005A70B8 /* TradingViewModel.swift */,
+			);
+			path = ViewModel;
+			sourceTree = "<group>";
+		};
+		C1FBAF7C239D4F3E005A70B8 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				C1114406239D39B7009854A8 /* TradingViewController.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		C1FBAF7D239D4F4E005A70B8 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				C1FBAF73239D4E30005A70B8 /* UIView+Constrains.swift */,
+				C1FBAF75239D4EC8005A70B8 /* NSObject+ClassName.swift */,
+				C1FBAF6F239D4617005A70B8 /* ArrayExtension.swift */,
+				C1FBAF80239D55AF005A70B8 /* UICollectionViewExtension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		C1FBAF7E239D4F5B005A70B8 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				C1FBAF6D239D3CB8005A70B8 /* Model.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		C1FBAF7F239D4F75005A70B8 /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				C1114408239D39B7009854A8 /* Main.storyboard */,
+				C111440D239D39B8009854A8 /* LaunchScreen.storyboard */,
+			);
+			path = Storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -214,9 +282,13 @@
 			files = (
 				C1FBAF72239D4A28005A70B8 /* TradingViewModel.swift in Sources */,
 				C1FBAF6E239D3CB8005A70B8 /* Model.swift in Sources */,
+				C1FBAF78239D4F17005A70B8 /* TradingCollectionViewCell.swift in Sources */,
+				C1FBAF74239D4E30005A70B8 /* UIView+Constrains.swift in Sources */,
+				C1FBAF81239D55AF005A70B8 /* UICollectionViewExtension.swift in Sources */,
 				C1114407239D39B7009854A8 /* TradingViewController.swift in Sources */,
 				C1114405239D39B7009854A8 /* AppDelegate.swift in Sources */,
 				C1FBAF70239D4617005A70B8 /* ArrayExtension.swift in Sources */,
+				C1FBAF76239D4EC8005A70B8 /* NSObject+ClassName.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,16 +1,20 @@
 PODS:
+  - RainKit (0.0.1)
   - Starscream (3.0.6)
 
 DEPENDENCIES:
+  - RainKit
   - Starscream (~> 3.0.2)
 
 SPEC REPOS:
   trunk:
+    - RainKit
     - Starscream
 
 SPEC CHECKSUMS:
+  RainKit: 3355658800a99b62460347f1c99fb6e9003e9beb
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
 
-PODFILE CHECKSUM: b0671c7696bd9cd06c5b24f82be798a96f83f96e
+PODFILE CHECKSUM: 3d0fb0fd01a10c2bc0f6657fbbae5be51673b9d0
 
 COCOAPODS: 1.8.3

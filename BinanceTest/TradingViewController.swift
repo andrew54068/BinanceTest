@@ -35,7 +35,12 @@ extension TradingViewController: WebSocketDelegate {
     }
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
-        
+        if let data: Data = text.data(using: .utf8),
+            let jsonObject: Any = try? JSONSerialization.jsonObject(with: data, options: []),
+            let jsonData: Data = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted),
+            let depthStreamModel: DepthStreamModel = try? JSONDecoder().decode(DepthStreamModel.self, from: jsonData) {
+            
+        }
     }
     
     func websocketDidReceiveData(socket: WebSocketClient, data: Data) {

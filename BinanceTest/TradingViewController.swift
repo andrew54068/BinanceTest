@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  TradingViewController.swift
 //  BinanceTest
 //
 //  Created by kidnapper on 2019/12/8.
@@ -8,11 +8,11 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+final class TradingViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
     }
 
 

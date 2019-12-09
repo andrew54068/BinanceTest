@@ -56,21 +56,21 @@ struct DepthStreamModel: Codable {
         var asksToBeUpdated: [OfferModel] = []
         while !singleKeyContainer.isAtEnd {
             let outerArr: [String] = try singleKeyContainer.decode([String].self)
-            if let priceLevelToBeUpdated: String = outerArr[safe: 0],
+            if let price: String = outerArr[safe: 0],
                 let quantity: String = outerArr[safe: 1] {
-                asksToBeUpdated.append(OfferModel(priceLevelToBeUpdated: priceLevelToBeUpdated,
+                asksToBeUpdated.append(OfferModel(price: price,
                                                   quantity: quantity))
             }
         }
         self.asksToBeUpdated = asksToBeUpdated
         
-        var singleKeyContainer2: UnkeyedDecodingContainer = try container.nestedUnkeyedContainer(forKey: .asksToBeUpdated)
+        var singleKeyContainer2: UnkeyedDecodingContainer = try container.nestedUnkeyedContainer(forKey: .bidsToBeUpdated)
         var bidsToBeUpdated: [OfferModel] = []
         while !singleKeyContainer2.isAtEnd {
             let outerArr: [String] = try singleKeyContainer2.decode([String].self)
-            if let priceLevelToBeUpdated: String = outerArr[safe: 0],
+            if let price: String = outerArr[safe: 0],
                 let quantity: String = outerArr[safe: 1] {
-                bidsToBeUpdated.append(OfferModel(priceLevelToBeUpdated: priceLevelToBeUpdated,
+                bidsToBeUpdated.append(OfferModel(price: price,
                                                   quantity: quantity))
             }
         }
@@ -79,7 +79,72 @@ struct DepthStreamModel: Codable {
     
 }
 
-struct OfferModel: Codable {
-    let priceLevelToBeUpdated: String
-    let quantity: String
+struct OfferModel: Codable, Comparable {
+    static func < (lhs: OfferModel, rhs: OfferModel) -> Bool {
+        guard let l: Double = Double(lhs.price.trimmingCharacters(in: .whitespaces)),
+            let r: Double = Double(rhs.price.trimmingCharacters(in: .whitespaces)) else { return false }
+        return l < r
+    }
+    
+    var price: String
+    var quantity: String
+}
+
+/*
+ {
+    lastUpdateId: 519067757,
+        bids: [
+        [
+         "0.00208390",
+         "14.46000000"
+        ],
+        asks: [
+        [
+         "0.00208440",
+         "74.59000000"
+        ]
+     ]
+ }
+ */
+
+struct DepthSnapshotModel: Codable {
+    let lastUpdateId: Int
+    let bids: [OfferModel]
+    let asks: [OfferModel]
+    
+    enum CodingKeys: String, CodingKey {
+        case lastUpdateId
+        case bids
+        case asks
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container: KeyedDecodingContainer = try decoder.container(keyedBy: CodingKeys.self)
+        lastUpdateId = try container.decode(Int.self, forKey: .lastUpdateId)
+        
+        var singleKeyContainer1: UnkeyedDecodingContainer = try container.nestedUnkeyedContainer(forKey: .bids)
+        var bids: [OfferModel] = []
+        while !singleKeyContainer1.isAtEnd {
+            let outerArr: [String] = try singleKeyContainer1.decode([String].self)
+            if let price: String = outerArr[safe: 0],
+                let quantity: String = outerArr[safe: 1] {
+                bids.append(OfferModel(price: price,
+                                       quantity: quantity))
+            }
+        }
+        self.bids = bids
+        
+        var singleKeyContainer2: UnkeyedDecodingContainer = try container.nestedUnkeyedContainer(forKey: .asks)
+        var asks: [OfferModel] = []
+        while !singleKeyContainer2.isAtEnd {
+            let outerArr: [String] = try singleKeyContainer2.decode([String].self)
+            if let price: String = outerArr[safe: 0],
+                let quantity: String = outerArr[safe: 1] {
+                asks.append(OfferModel(price: price,
+                                       quantity: quantity))
+            }
+        }
+        self.asks = asks
+    }
+    
 }

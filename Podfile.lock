@@ -1,20 +1,34 @@
 PODS:
+  - Alamofire (4.9.1)
+  - Moya (12.0.1):
+    - Moya/Core (= 12.0.1)
+  - Moya/Core (12.0.1):
+    - Alamofire (~> 4.1)
+    - Result (~> 4.0)
   - RainKit (0.0.1)
+  - Result (4.1.0)
   - Starscream (3.0.6)
 
 DEPENDENCIES:
+  - Moya (~> 12.0.1)
   - RainKit
   - Starscream (~> 3.0.2)
 
 SPEC REPOS:
   trunk:
+    - Alamofire
+    - Moya
     - RainKit
+    - Result
     - Starscream
 
 SPEC CHECKSUMS:
+  Alamofire: 85e8a02c69d6020a0d734f6054870d7ecb75cf18
+  Moya: cf730b3cd9e005401ef37a85143aa141a12fd38f
   RainKit: 3355658800a99b62460347f1c99fb6e9003e9beb
+  Result: bd966fac789cc6c1563440b348ab2598cc24d5c7
   Starscream: ef3ece99d765eeccb67de105bfa143f929026cf5
 
-PODFILE CHECKSUM: 3d0fb0fd01a10c2bc0f6657fbbae5be51673b9d0
+PODFILE CHECKSUM: 032d42b9e013efe561c8d32c981c2480a90b6ab3
 
 COCOAPODS: 1.8.3

@@ -43,7 +43,7 @@ final class TradingViewController: UIViewController {
 extension TradingViewController: TradingViewModelDelegate {
     
     func ReceiveNewData() {
-        collectionView.performBatchUpdates(nil, completion: nil)
+        collectionView.reloadData()
     }
     
 }

@@ -19,6 +19,8 @@
 		C1FBAF76239D4EC8005A70B8 /* NSObject+ClassName.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FBAF75239D4EC8005A70B8 /* NSObject+ClassName.swift */; };
 		C1FBAF78239D4F17005A70B8 /* TradingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FBAF77239D4F17005A70B8 /* TradingCollectionViewCell.swift */; };
 		C1FBAF81239D55AF005A70B8 /* UICollectionViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FBAF80239D55AF005A70B8 /* UICollectionViewExtension.swift */; };
+		C1FBAF84239D65D4005A70B8 /* WebService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FBAF83239D65D4005A70B8 /* WebService.swift */; };
+		C1FBAF86239D6A2E005A70B8 /* MoyaTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FBAF85239D6A2E005A70B8 /* MoyaTarget.swift */; };
 		F4D053A75AC0556FA35A5A11 /* Pods_BinanceTest.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7E4B83043DAE58C1BFA0D00D /* Pods_BinanceTest.framework */; };
 /* End PBXBuildFile section */
 
@@ -40,6 +42,8 @@
 		C1FBAF75239D4EC8005A70B8 /* NSObject+ClassName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSObject+ClassName.swift"; sourceTree = "<group>"; };
 		C1FBAF77239D4F17005A70B8 /* TradingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradingCollectionViewCell.swift; sourceTree = "<group>"; };
 		C1FBAF80239D55AF005A70B8 /* UICollectionViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewExtension.swift; sourceTree = "<group>"; };
+		C1FBAF83239D65D4005A70B8 /* WebService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebService.swift; sourceTree = "<group>"; };
+		C1FBAF85239D6A2E005A70B8 /* MoyaTarget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoyaTarget.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -92,6 +96,7 @@
 		C1114403239D39B7009854A8 /* BinanceTest */ = {
 			isa = PBXGroup;
 			children = (
+				C1FBAF82239D65B8005A70B8 /* WebService */,
 				C1114404239D39B7009854A8 /* AppDelegate.swift */,
 				C1FBAF7F239D4F75005A70B8 /* Storyboard */,
 				C1FBAF7D239D4F4E005A70B8 /* Extension */,
@@ -163,6 +168,15 @@
 				C111440D239D39B8009854A8 /* LaunchScreen.storyboard */,
 			);
 			path = Storyboard;
+			sourceTree = "<group>";
+		};
+		C1FBAF82239D65B8005A70B8 /* WebService */ = {
+			isa = PBXGroup;
+			children = (
+				C1FBAF83239D65D4005A70B8 /* WebService.swift */,
+				C1FBAF85239D6A2E005A70B8 /* MoyaTarget.swift */,
+			);
+			path = WebService;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -288,7 +302,9 @@
 				C1114407239D39B7009854A8 /* TradingViewController.swift in Sources */,
 				C1114405239D39B7009854A8 /* AppDelegate.swift in Sources */,
 				C1FBAF70239D4617005A70B8 /* ArrayExtension.swift in Sources */,
+				C1FBAF84239D65D4005A70B8 /* WebService.swift in Sources */,
 				C1FBAF76239D4EC8005A70B8 /* NSObject+ClassName.swift in Sources */,
+				C1FBAF86239D6A2E005A70B8 /* MoyaTarget.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

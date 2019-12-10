@@ -94,8 +94,7 @@ final class TradingViewModel {
 
     func numberOfItem() -> Int {
         guard let model: (asks: [OfferModel], bids: [OfferModel]) = combinedModel else { return 0 }
-        return max(model.bids.count,
-                   model.asks.count)
+        return min(max(model.bids.count, model.asks.count), 14)
     }
     
     func offerModels(by indexPath: IndexPath) -> (bid: OfferModel?, ask: OfferModel?) {

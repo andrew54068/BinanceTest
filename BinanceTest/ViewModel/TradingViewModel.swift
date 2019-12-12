@@ -19,9 +19,11 @@ final class TradingViewModel {
     
     weak var delegate: TradingViewModelDelegate?
     private var streamModels: [DepthStreamModel] = []
-    private var combinedModel: (asks: [OfferModel], bids: [OfferModel])?
-    private var bidPriceDic: [String: String] = [:]
-    private var askPriceDic: [String: String] = [:]
+    
+    private var mergedModel: (asks: [OfferModel], bids: [OfferModel]) = ([], [])
+    
+    private var askOfferPool: [String: String] = [:]
+    private var bidOfferPool: [String: String] = [:]
     
     init() {
         if let url: URL = URL(string: apiString) {
@@ -33,10 +35,10 @@ final class TradingViewModel {
     }
     
     private func loadSnapshot() {
-        WebService.shared.getTradeDepthSnapshot(target: BinanceApi.depthSnapshot(symbol: "BNBBTC", limit: 100),
+        WebService.shared.getTradeDepthSnapshot(target: BinanceApi.depthSnapshot(symbol: "BNBBTC", limit: 1000),
                                                 success: { depthSnapshotModel in
                                                     DispatchQueue.main.async {
-                                                        self.setupCombinedModel(with: depthSnapshotModel)
+                                                        self.setupMergedModel(with: depthSnapshotModel)
                                                     }
             },
                                                 failure: { error in
@@ -44,62 +46,59 @@ final class TradingViewModel {
         })
     }
     
-    private func setupCombinedModel(with snapshot: DepthSnapshotModel) {
-        combinedModel = (snapshot.asks, snapshot.bids)
+    private func setupMergedModel(with snapshot: DepthSnapshotModel) {
+        snapshot.asks.forEach {
+            askOfferPool[$0.price] = $0.quantity
+        }
+        snapshot.bids.forEach {
+            bidOfferPool[$0.price] = $0.quantity
+        }
         let validStreamModels: [DepthStreamModel] = streamModels.filter({ $0.finalUpdateIdInEvent > snapshot.lastUpdateId })
-        validStreamModels.forEach({
-            mergeModel(combinedModel: (snapshot.asks, snapshot.bids), streamModel: $0)
-        })
+        validStreamModels.forEach({ updatePool(with: $0) })
+        mergedModel = getOfferTuple(by: 8)
     }
     
-    private func updateCombinedModel(with streamModel: DepthStreamModel) {
-        guard let combinedModel = combinedModel else { return }
-        mergeModel(combinedModel: combinedModel, streamModel: streamModel)
-    }
-    
-    private func mergeModel(combinedModel: (asks: [OfferModel], bids: [OfferModel]), streamModel: DepthStreamModel) {
-        var tempCombinedModel = combinedModel
+    private func updatePool(with streamModel: DepthStreamModel) {
         streamModel.asksToBeUpdated.forEach { offerModel in
-            var contains: Bool = false
-            for (index, ask) in tempCombinedModel.asks.enumerated() where ask.price == offerModel.price {
-                tempCombinedModel.asks[index] = offerModel
-                contains = true
-            }
-            if contains == false {
-                tempCombinedModel.asks.append(offerModel)
-                tempCombinedModel.asks.sort(by: <)
-            }
+            askOfferPool[offerModel.price] = offerModel.quantity
         }
-        tempCombinedModel.asks.removeAll(where: { offerModel -> Bool in
-            guard let quantity: Double = Double(offerModel.quantity.trimmingCharacters(in: .whitespaces)) else { return true }
-            return quantity == 0
-        })
         streamModel.bidsToBeUpdated.forEach { offerModel in
-            var contains: Bool = false
-            for (index, bid) in tempCombinedModel.bids.enumerated() where bid.price == offerModel.price {
-                tempCombinedModel.bids[index] = offerModel
-                contains = true
-            }
-            if contains == false {
-                tempCombinedModel.bids.append(offerModel)
-                tempCombinedModel.bids.sort(by: >)
+            bidOfferPool[offerModel.price] = offerModel.quantity
+        }
+    }
+    
+    private func getOfferTuple(by precisionDigit: Int) -> (asks: [OfferModel], bids: [OfferModel]) {
+        let askGrouping: [String: Array<(key: String, value: String)>] = grouping(pool: askOfferPool,
+                                                                                  by: precisionDigit)
+        let asks: [OfferModel] = askGrouping.map({ OfferModel(price: $0.key,
+                                                              quantity: String($0.value.reduce(0) { $0 + (Double($1.value) ?? 0) })) })
+        
+        let bidGrouping: [String: Array<(key: String, value: String)>] = grouping(pool: bidOfferPool,
+                                                                                  by: precisionDigit)
+        let bids: [OfferModel] = bidGrouping.map({ OfferModel(price: $0.key,
+                                                              quantity: String($0.value.reduce(0) { $0 + (Double($1.value) ?? 0) })) })
+        
+        mergedModel = (asks.sorted(by: <), bids.sorted(by: >))
+        return mergedModel
+    }
+    
+    private func grouping(pool: [String: String], by precisionDigit: Int) -> [String: Array<(key: String, value: String)>] {
+        let scaleFactor: Double = pow(10, Double(precisionDigit))
+        return Dictionary(grouping: pool) { element -> String in
+            if let double: Double = Double(element.key.trimmingCharacters(in: .whitespaces)) {
+                return String(ceil(double * scaleFactor) / scaleFactor)
+            } else {
+                return "error"
             }
         }
-        tempCombinedModel.bids.removeAll(where: { offerModel -> Bool in
-            guard let quantity: Double = Double(offerModel.quantity.trimmingCharacters(in: .whitespaces)) else { return true }
-            return quantity == 0
-        })
-        self.combinedModel = tempCombinedModel
     }
 
     func numberOfItem() -> Int {
-        guard let model: (asks: [OfferModel], bids: [OfferModel]) = combinedModel else { return 0 }
-        return min(max(model.bids.count, model.asks.count), 14)
+        return min(max(mergedModel.bids.count, mergedModel.asks.count), 14)
     }
     
-    func offerModels(by indexPath: IndexPath) -> (bid: OfferModel?, ask: OfferModel?) {
-        return (combinedModel?.bids[safe: indexPath.item],
-                combinedModel?.asks[safe: indexPath.item])
+    func offerModels(by indexPath: IndexPath) -> (ask: OfferModel?, bid: OfferModel?) {
+        return (mergedModel.asks[safe: indexPath.item], mergedModel.bids[safe: indexPath.item])
     }
     
 }
@@ -120,10 +119,10 @@ extension TradingViewModel: WebSocketDelegate {
             let jsonData: Data = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted),
             let depthStreamModel: DepthStreamModel = try? JSONDecoder().decode(DepthStreamModel.self, from: jsonData) {
             DispatchQueue.main.async {
-                if self.combinedModel == nil {
+                if self.mergedModel.asks.count + self.mergedModel.bids.count == 0 {
                     self.streamModels.append(depthStreamModel)
                 } else {
-                    self.updateCombinedModel(with: depthStreamModel)
+                    self.updatePool(with: depthStreamModel)
                     self.delegate?.ReceiveNewData()
                 }
             }

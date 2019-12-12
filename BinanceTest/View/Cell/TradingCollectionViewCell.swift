@@ -34,7 +34,7 @@ final class TradingCollectionViewCell: UICollectionViewCell {
         super.init(coder: coder)
     }
     
-    func update(bidModel: OfferModel?, askModel: OfferModel?) {
+    func update(askModel: OfferModel?, bidModel: OfferModel?) {
         setupViews()
         bidQuantityLabel.text = bidModel?.quantity
         bidPriceLabel.text = bidModel?.price

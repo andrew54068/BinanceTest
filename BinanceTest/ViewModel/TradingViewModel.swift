@@ -25,6 +25,26 @@ final class TradingViewModel {
     private var askOfferPool: [String: String] = [:]
     private var bidOfferPool: [String: String] = [:]
     
+    var precisionDigit: Int = 7
+    
+    private lazy var priceFormatter: NumberFormatter = {
+        let formatter: NumberFormatter = NumberFormatter()
+        formatter.allowsFloats = true
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = precisionDigit
+        formatter.minimumFractionDigits = precisionDigit
+        return formatter
+    }()
+    
+    private lazy var quantityFormatter: NumberFormatter = {
+        let formatter: NumberFormatter = NumberFormatter()
+        formatter.allowsFloats = true
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 2
+        return formatter
+    }()
+    
     init() {
         if let url: URL = URL(string: apiString) {
             socket = WebSocket(url: url)
@@ -55,7 +75,7 @@ final class TradingViewModel {
         }
         let validStreamModels: [DepthStreamModel] = streamModels.filter({ $0.finalUpdateIdInEvent > snapshot.lastUpdateId })
         validStreamModels.forEach({ updatePool(with: $0) })
-        mergedModel = getOfferTuple(by: 8)
+        mergedModel = getOfferTuple(by: precisionDigit)
     }
     
     private func updatePool(with streamModel: DepthStreamModel) {
@@ -71,14 +91,12 @@ final class TradingViewModel {
         let bidGrouping: [String: Array<(key: String, value: String)>] = grouping(pool: bidOfferPool,
                                                                                   by: precisionDigit,
                                                                                   roundStrategy: floor)
-        let bids: [OfferModel] = bidGrouping.map({ OfferModel(price: $0.key,
-                                                              quantity: String($0.value.reduce(0) { $0 + (Double($1.value) ?? 0) })) })
+        let bids: [OfferModel] = transformToModels(from: bidGrouping, formatter: quantityFormatter)
         
         let askGrouping: [String: Array<(key: String, value: String)>] = grouping(pool: askOfferPool,
                                                                                   by: precisionDigit,
                                                                                   roundStrategy: ceil)
-        let asks: [OfferModel] = askGrouping.map({ OfferModel(price: $0.key,
-                                                              quantity: String($0.value.reduce(0) { $0 + (Double($1.value) ?? 0) })) })
+        let asks: [OfferModel] = transformToModels(from: askGrouping, formatter: quantityFormatter)
         
         mergedModel = (bids.sorted(by: >), asks.sorted(by: <))
         return mergedModel
@@ -90,7 +108,12 @@ final class TradingViewModel {
             if Double(element.value.trimmingCharacters(in: .whitespaces)) == 0 {
                 return "0"
             } else if let double: Double = Double(element.key.trimmingCharacters(in: .whitespaces)) {
-                return String(roundStrategy(double * scaleFactor) / scaleFactor)
+                let roundedResult: Decimal = Decimal(roundStrategy(double * scaleFactor)) / Decimal(scaleFactor)
+                if let formattedString: String = priceFormatter.string(from: roundedResult as NSDecimalNumber) {
+                    return formattedString
+                } else {
+                    return "error"
+                }
             } else {
                 return "error"
             }
@@ -100,12 +123,23 @@ final class TradingViewModel {
         return result
     }
     
+    private func transformToModels(from grouping: [String: Array<(key: String, value: String)>], formatter: NumberFormatter) -> [OfferModel] {
+        return grouping.compactMap({
+            if let quantity: String = formatter.string(from: NSNumber(value: $0.value.reduce(0) { $0 + (Double($1.value) ?? 0) })) {
+                return OfferModel(price: $0.key,
+                                  quantity: quantity)
+            } else {
+                return nil
+            }
+        })
+    }
+    
     func numberOfItem() -> Int {
         return min(max(mergedModel.bids.count, mergedModel.asks.count), 14)
     }
     
     func offerModels(by indexPath: IndexPath) -> (bid: OfferModel?, ask: OfferModel?) {
-        mergedModel = getOfferTuple(by: 8)
+        mergedModel = getOfferTuple(by: precisionDigit)
         return (mergedModel.bids[safe: indexPath.item], mergedModel.asks[safe: indexPath.item])
     }
     

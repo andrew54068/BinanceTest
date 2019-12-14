@@ -20,7 +20,7 @@ final class TradingViewModel {
     weak var delegate: TradingViewModelDelegate?
     private var streamModels: [DepthStreamModel] = []
     
-    private var mergedModel: (asks: [OfferModel], bids: [OfferModel]) = ([], [])
+    private var mergedModel: (bids: [OfferModel], asks: [OfferModel]) = ([], [])
     
     private var askOfferPool: [String: String] = [:]
     private var bidOfferPool: [String: String] = [:]
@@ -40,18 +40,18 @@ final class TradingViewModel {
                                                     DispatchQueue.main.async {
                                                         self.setupMergedModel(with: depthSnapshotModel)
                                                     }
-            },
+        },
                                                 failure: { error in
                                                     
         })
     }
     
     private func setupMergedModel(with snapshot: DepthSnapshotModel) {
-        snapshot.asks.forEach {
-            askOfferPool[$0.price] = $0.quantity
-        }
         snapshot.bids.forEach {
             bidOfferPool[$0.price] = $0.quantity
+        }
+        snapshot.asks.forEach {
+            askOfferPool[$0.price] = $0.quantity
         }
         let validStreamModels: [DepthStreamModel] = streamModels.filter({ $0.finalUpdateIdInEvent > snapshot.lastUpdateId })
         validStreamModels.forEach({ updatePool(with: $0) })
@@ -59,46 +59,54 @@ final class TradingViewModel {
     }
     
     private func updatePool(with streamModel: DepthStreamModel) {
-        streamModel.asksToBeUpdated.forEach { offerModel in
-            askOfferPool[offerModel.price] = offerModel.quantity
-        }
         streamModel.bidsToBeUpdated.forEach { offerModel in
             bidOfferPool[offerModel.price] = offerModel.quantity
         }
+        streamModel.asksToBeUpdated.forEach { offerModel in
+            askOfferPool[offerModel.price] = offerModel.quantity
+        }
     }
     
-    private func getOfferTuple(by precisionDigit: Int) -> (asks: [OfferModel], bids: [OfferModel]) {
-        let askGrouping: [String: Array<(key: String, value: String)>] = grouping(pool: askOfferPool,
-                                                                                  by: precisionDigit)
-        let asks: [OfferModel] = askGrouping.map({ OfferModel(price: $0.key,
-                                                              quantity: String($0.value.reduce(0) { $0 + (Double($1.value) ?? 0) })) })
-        
+    private func getOfferTuple(by precisionDigit: Int) -> (bids: [OfferModel], asks: [OfferModel]) {
         let bidGrouping: [String: Array<(key: String, value: String)>] = grouping(pool: bidOfferPool,
-                                                                                  by: precisionDigit)
+                                                                                  by: precisionDigit,
+                                                                                  roundStrategy: floor)
         let bids: [OfferModel] = bidGrouping.map({ OfferModel(price: $0.key,
                                                               quantity: String($0.value.reduce(0) { $0 + (Double($1.value) ?? 0) })) })
         
-        mergedModel = (asks.sorted(by: <), bids.sorted(by: >))
+        let askGrouping: [String: Array<(key: String, value: String)>] = grouping(pool: askOfferPool,
+                                                                                  by: precisionDigit,
+                                                                                  roundStrategy: ceil)
+        let asks: [OfferModel] = askGrouping.map({ OfferModel(price: $0.key,
+                                                              quantity: String($0.value.reduce(0) { $0 + (Double($1.value) ?? 0) })) })
+        
+        mergedModel = (bids.sorted(by: >), asks.sorted(by: <))
         return mergedModel
     }
     
-    private func grouping(pool: [String: String], by precisionDigit: Int) -> [String: Array<(key: String, value: String)>] {
+    private func grouping(pool: [String: String], by precisionDigit: Int, roundStrategy: ((_: Double) -> Double)) -> [String: Array<(key: String, value: String)>] {
         let scaleFactor: Double = pow(10, Double(precisionDigit))
-        return Dictionary(grouping: pool) { element -> String in
-            if let double: Double = Double(element.key.trimmingCharacters(in: .whitespaces)) {
-                return String(ceil(double * scaleFactor) / scaleFactor)
+        var result = Dictionary(grouping: pool) { element -> String in
+            if Double(element.value.trimmingCharacters(in: .whitespaces)) == 0 {
+                return "0"
+            } else if let double: Double = Double(element.key.trimmingCharacters(in: .whitespaces)) {
+                return String(roundStrategy(double * scaleFactor) / scaleFactor)
             } else {
                 return "error"
             }
         }
+        result.removeValue(forKey: "0")
+        result.removeValue(forKey: "error")
+        return result
     }
-
+    
     func numberOfItem() -> Int {
         return min(max(mergedModel.bids.count, mergedModel.asks.count), 14)
     }
     
-    func offerModels(by indexPath: IndexPath) -> (ask: OfferModel?, bid: OfferModel?) {
-        return (mergedModel.asks[safe: indexPath.item], mergedModel.bids[safe: indexPath.item])
+    func offerModels(by indexPath: IndexPath) -> (bid: OfferModel?, ask: OfferModel?) {
+        mergedModel = getOfferTuple(by: 8)
+        return (mergedModel.bids[safe: indexPath.item], mergedModel.asks[safe: indexPath.item])
     }
     
 }

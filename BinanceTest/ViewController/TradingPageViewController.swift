@@ -12,6 +12,9 @@ import Reachability
 
 final class TradingPageViewController: UIViewController {
     
+    var tradingViewController: TradingViewController?
+    var historyViewController: HistoryViewController?
+    
     lazy var reachability = try! Reachability()
     
     lazy var networkUnreachableBanner: UILabel = {
@@ -36,7 +39,10 @@ final class TradingPageViewController: UIViewController {
                            options: .curveEaseInOut,
                            animations: {
                             self.networkUnreachableBanner.transform = CGAffineTransform(translationX: 0, y: -100)
-            }, completion: nil)
+            }, completion: { _ in
+                self.tradingViewController?.connet()
+                self.historyViewController?.connet()
+            })
         }
         
         reachability.whenUnreachable = { _ in
@@ -81,11 +87,13 @@ final class TradingPageViewController: UIViewController {
         
         let titles: [String] = ["Order Book", "Market History"]
         
-        let tradingViewController: TradingViewController = TradingViewController()
-        addChild(tradingViewController)
+        let tradingVC: TradingViewController = TradingViewController()
+        tradingViewController = tradingVC
+        addChild(tradingVC)
         
-        let historyViewController: HistoryViewController = HistoryViewController()
-        addChild(historyViewController)
+        let historyVC: HistoryViewController = HistoryViewController()
+        historyViewController = historyVC
+        addChild(historyVC)
         
         let y: CGFloat = UIApplication.shared.statusBarFrame.height +
             (navigationController?.navigationBar.frame.height ?? 0)

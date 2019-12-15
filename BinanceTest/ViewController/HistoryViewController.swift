@@ -56,6 +56,10 @@ final class HistoryViewController: UIViewController {
                                 withReuseIdentifier: HistoryCollectionViewHeader.className)
     }
     
+    func connet() {
+        viewModel.connet()
+    }
+    
 }
 
 extension HistoryViewController: HistoryViewModelDelegate {

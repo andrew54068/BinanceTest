@@ -53,6 +53,10 @@ final class TradingViewModel {
         loadSnapshot()
     }
     
+    func connet() {
+        socket?.connect()
+    }
+    
     private func loadSnapshot() {
         WebService.shared.getTradeDepthSnapshot(symbol: "BNBBTC",
                                                 limit: 1000,

@@ -30,6 +30,10 @@ final class HistoryViewModel {
         loadSnapshot()
     }
     
+    func connet() {
+        socket?.connect()
+    }
+    
     private func loadSnapshot() {
         WebService.shared.getAggregateSnapshot(symbol: "BNBBTC",
                                                limit: 1000,

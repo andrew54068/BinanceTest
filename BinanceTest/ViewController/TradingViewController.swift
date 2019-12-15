@@ -89,7 +89,10 @@ final class TradingViewController: UIViewController {
     
     @objc private func hideSelectionView(_ sender: UIButton) {
         precisionSelectionBackgroundButton.isHidden = true
-        
+    }
+    
+    func connet() {
+        viewModel.connet()
     }
     
 }

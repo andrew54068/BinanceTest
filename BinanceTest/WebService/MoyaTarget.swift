@@ -10,6 +10,7 @@ import Moya
 
 enum BinanceApi: TargetType {
     case depthSnapshot(symbol: String, limit: Int)
+    case aggregateTradeSnapshot(symbol: String, limit: Int)
 }
 
 extension BinanceApi {
@@ -23,7 +24,12 @@ extension BinanceApi {
     }
     
     var path: String {
-        return "api/v1/depth"
+        switch self {
+        case .depthSnapshot:
+            return "api/v1/depth"
+        case .aggregateTradeSnapshot:
+            return "api/v1/aggTrades"
+        }
     }
     
     var method: Method {
@@ -33,6 +39,10 @@ extension BinanceApi {
     var task: Task {
         switch self {
         case let .depthSnapshot(symbol, limit):
+            return .requestParameters(parameters: ["symbol": symbol,
+                                                   "limit": String(limit)],
+                                      encoding: URLEncoding.default)
+        case let .aggregateTradeSnapshot(symbol, limit):
             return .requestParameters(parameters: ["symbol": symbol,
                                                    "limit": String(limit)],
                                       encoding: URLEncoding.default)

@@ -33,14 +33,13 @@ final class TradingPageViewController: UIViewController {
         let tradingViewController: TradingViewController = TradingViewController()
         addChild(tradingViewController)
         
-        
+        let historyViewController: HistoryViewController = HistoryViewController()
+        addChild(historyViewController)
         
         let y: CGFloat = UIApplication.shared.statusBarFrame.height +
             (navigationController?.navigationBar.frame.height ?? 0)
         let size: CGSize = UIScreen.main.bounds.size
         
-        // 创建对应的PageView，并设置它的frame
-        // titleView和contentView会连在一起
         let pageView: PageView = PageView(frame: CGRect(x: 0,
                                                         y: y,
                                                         width: size.width,

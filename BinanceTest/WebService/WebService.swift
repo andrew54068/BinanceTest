@@ -55,11 +55,23 @@ final class WebService: NSObject {
 extension WebService {
     
     func getTradeDepthSnapshot(provider: MoyaProvider<BinanceApi> = .default,
-                               target: BinanceApi,
+                               symbol: String,
+                               limit: Int,
                                success: ModelSuccessClosure<DepthSnapshotModel>?,
                                failure: ErrorClosure?) {
         
-        request(target: target,
+        request(target: BinanceApi.depthSnapshot(symbol: symbol, limit: limit),
+                success: success,
+                failure: failure)
+    }
+    
+    func getAggregateSnapshot(provider: MoyaProvider<BinanceApi> = .default,
+                              symbol: String,
+                              limit: Int,
+                              success: ModelSuccessClosure<[AggregateTradeModel]>?,
+                              failure: ErrorClosure?) {
+        
+        request(target: BinanceApi.aggregateTradeSnapshot(symbol: symbol, limit: limit),
                 success: success,
                 failure: failure)
     }

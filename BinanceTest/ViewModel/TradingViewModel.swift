@@ -54,7 +54,8 @@ final class TradingViewModel {
     }
     
     private func loadSnapshot() {
-        WebService.shared.getTradeDepthSnapshot(target: BinanceApi.depthSnapshot(symbol: "BNBBTC", limit: 1000),
+        WebService.shared.getTradeDepthSnapshot(symbol: "BNBBTC",
+                                                limit: 1000,
                                                 success: { depthSnapshotModel in
                                                     DispatchQueue.main.async {
                                                         self.setupMergedModel(with: depthSnapshotModel)

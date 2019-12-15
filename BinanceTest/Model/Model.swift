@@ -6,6 +6,8 @@
 //  Copyright © 2019 kidnapper. All rights reserved.
 //
 
+import Foundation
+
 /*
  {
    "E": 1575813395670,      // Event time
@@ -145,6 +147,49 @@ struct DepthSnapshotModel: Codable {
             }
         }
         self.asks = asks
+    }
+    
+}
+
+/*
+ {
+   "e": "aggTrade",  // Event type
+   "E": 123456789,   // Event time
+   "s": "BNBBTC",    // Symbol
+   "a": 12345,       // Aggregate trade ID
+   "p": "0.001",     // Price
+   "q": "100",       // Quantity
+   "f": 100,         // First trade ID
+   "l": 105,         // Last trade ID
+   "T": 123456785,   // Trade time
+   "m": true,        // Is the buyer the market maker?
+   "M": true         // Ignore
+ }
+ */
+
+struct AggregateTradeModel: Codable {
+    let tradeId: Int
+    let price: String
+    let quantity: String
+    let firstTradeId: Int
+    let LastTradeId: Int
+    let tradeTime: TimeInterval
+    let isMarketMaker: Bool
+    
+    enum CodingKeys: String, CodingKey {
+        case tradeId  = "a"
+        case price  = "p"
+        case quantity  = "q"
+        case firstTradeId  = "f"
+        case LastTradeId  = "l"
+        case tradeTime  = "T"
+        case isMarketMaker  = "m"
+    }
+    
+    func getTradeTime() -> String {
+        let dateFormatter: DateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "HH:mm:ss"
+        return dateFormatter.string(from: Date(timeIntervalSince1970: Double(tradeTime)))
     }
     
 }

@@ -27,6 +27,7 @@ final class TradingPageViewController: UIViewController {
         style.bottomLineColor = .systemYellow
         style.isTitleViewScrollEnabled = true
         style.isTitleScaleEnabled = false
+        style.isContentScrollEnabled = true
         
         let titles: [String] = ["Order Book", "Market History"]
         

@@ -16,8 +16,10 @@ final class TradingViewController: UIViewController {
     
     private lazy var layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         .itemSize(CGSize(width: view.bounds.width,
-                         height: 20))
+                         height: 30))
         .scrollDirection(.vertical)
+        .minimumLineSpacing(0)
+        .minimumInteritemSpacing(0)
     
     lazy var collectionView: UICollectionView = UICollectionView(frame: .zero,
                                                                  collectionViewLayout: layout)

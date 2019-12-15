@@ -102,12 +102,12 @@ final class TradingCollectionViewCell: UICollectionViewCell {
         backgroundLayers = [addLayerIfNeeded(quantity: bidQuantity,
                                              type: .bid,
                                              maxValue: maxValue,
-                                             color: UIColor.systemGreen.withAlphaComponent(0.3))]
+                                             color: UIColor.systemGreen.withAlphaComponent(0.2))]
         
         backgroundLayers.append(addLayerIfNeeded(quantity: askQuantity,
                                                  type: .ask,
                                                  maxValue: maxValue,
-                                                 color: UIColor.systemRed.withAlphaComponent(0.3)))
+                                                 color: UIColor.systemRed.withAlphaComponent(0.2)))
     }
     
     private func addLayerIfNeeded(quantity: String, type: TradingType, maxValue: CGFloat, color: UIColor) -> CALayer {

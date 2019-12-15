@@ -62,8 +62,10 @@ extension TradingViewController: UICollectionViewDelegate, UICollectionViewDataS
         let cell: TradingCollectionViewCell = collectionView.dequeueReusableCell(with: TradingCollectionViewCell.self,
                                                                                  indexPath: indexPath)
         let offerModels: (bid: OfferModel?, ask: OfferModel?) = viewModel.offerModels(by: indexPath)
+        
         cell.update(bidModel: offerModels.bid,
-                    askModel: offerModels.ask)
+                    askModel: offerModels.ask,
+                    precisionOrder: 4)
         return cell
     }
     

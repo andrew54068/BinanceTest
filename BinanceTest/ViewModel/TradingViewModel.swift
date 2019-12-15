@@ -32,8 +32,6 @@ final class TradingViewModel {
         let formatter: NumberFormatter = NumberFormatter()
         formatter.allowsFloats = true
         formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = precisionDigit
-        formatter.minimumFractionDigits = precisionDigit
         return formatter
     }()
     
@@ -110,6 +108,8 @@ final class TradingViewModel {
                 return "0"
             } else if let double: Double = Double(element.key.trimmingCharacters(in: .whitespaces)) {
                 let roundedResult: Decimal = Decimal(roundStrategy(double * scaleFactor)) / Decimal(scaleFactor)
+                priceFormatter.maximumFractionDigits = precisionDigit
+                priceFormatter.minimumFractionDigits = precisionDigit
                 if let formattedString: String = priceFormatter.string(from: roundedResult as NSDecimalNumber) {
                     return formattedString
                 } else {
@@ -162,7 +162,7 @@ extension TradingViewModel: WebSocketDelegate {
                 self.streamModels.append(depthStreamModel)
             } else {
                 self.updatePool(with: depthStreamModel)
-                self.mergedModel = self.getOfferTuple(by: self.precisionDigit)
+                self.mergedModel = self.getOfferTuple(by: self.precisionDigitSelected)
                 self.delegate?.ReceiveNewData()
             }
         }

@@ -10,45 +10,24 @@ import UIKit
 import RainKit
 
 protocol TradingCollectionViewHeaderDelegate: AnyObject {
-    func selected(precision: Int)
+    func precisionOptionDisplay()
 }
 
 final class TradingCollectionViewHeader: UICollectionReusableView {
-    
-    private var selections: [Int] = [] {
-        didSet {
-            selections.enumerated().forEach {
-                let button: UIButton = UIButton().title(String($1), for: .normal)
-                button.tag = $0
-                button.backgroundColor = .black
-                button.addTarget(self, action: #selector(precisionSelected), for: .touchUpInside)
-                selectionView.addArrangedSubview(button)
-            }
-        }
-    }
     
     private let fontSize: CGFloat = 15
     
     lazy var bidTitleLabel: UILabel = self.createTitleLabel(size: fontSize).text("Bid")
     lazy var askTitleLabel: UILabel = self.createTitleLabel(size: fontSize).text("Ask")
+    
     lazy var percisionBotton: UIButton = {
         let button: UIButton = UIButton()
         button.setTitle("8", for: .normal)
         button.setImage(UIImage(named: "bottomImage")!, for: .normal)
         button.semanticContentAttribute = .forceRightToLeft
         button.backgroundColor = UIColor(red: 35 / 255, green: 40 / 255, blue: 51 / 255, alpha: 1)
+        button.addTarget(self, action: #selector(showSelection), for: .touchUpInside)
         return button
-    }()
-    
-    lazy var selectionView: UIStackView = {
-        let stackView: UIStackView = UIStackView()
-        stackView.distribution = .fillEqually
-        stackView.alignment = .fill
-        stackView.axis = .vertical
-        stackView.isHidden = true
-        stackView.backgroundColor = .black
-        stackView.isUserInteractionEnabled = true
-        return stackView
     }()
     
     weak var delegate: TradingCollectionViewHeaderDelegate?
@@ -63,16 +42,10 @@ final class TradingCollectionViewHeader: UICollectionReusableView {
         setup()
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        selectionView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-    }
-    
     private func setup() {
         addSubview(bidTitleLabel)
         addSubview(askTitleLabel)
         addSubview(percisionBotton)
-        addSubview(selectionView)
         
         bidTitleLabel.anchor(\.leadingAnchor,
                              to: self.leadingAnchor,
@@ -99,25 +72,6 @@ final class TradingCollectionViewHeader: UICollectionReusableView {
                                constant: -15)
         
         percisionBotton.anchor(\.widthAnchor, to: 70)
-        
-        percisionBotton.addTarget(self, action: #selector(showSelection), for: .touchUpInside)
-        
-        selectionView.anchor(\.topAnchor,
-                             to: percisionBotton.bottomAnchor)
-        selectionView.anchor(\.trailingAnchor,
-                             to: self.trailingAnchor,
-                             constant: -20)
-        selectionView.anchor(\.widthAnchor,
-                             to: 80)
-    }
-    
-    func setupBottonSelection(heighestPrecision: Int, currentSelected: Int) {
-        var selections: [Int] = []
-        for precision in 0...heighestPrecision {
-            selections.append(precision)
-        }
-        self.selections = Array(selections.reversed().prefix(4)).reversed()
-        percisionBotton.setTitle(String(currentSelected), for: .normal)
     }
     
     private func createTitleLabel(size: CGFloat) -> UILabel {
@@ -128,12 +82,13 @@ final class TradingCollectionViewHeader: UICollectionReusableView {
             .numberOfLines(1)
     }
     
-    @objc func showSelection(_ sender: UIButton) {
-        selectionView.isHidden.toggle()
+    func setupBottonSelection(currentSelected: Int) {
+        percisionBotton.setTitle(String(currentSelected), for: .normal)
     }
     
-    @objc func precisionSelected(_ sender: UIButton) {
-        delegate?.selected(precision: sender.tag)
+    @objc func showSelection(_ sender: UIButton) {
+        delegate?.precisionOptionDisplay()
     }
     
 }
+

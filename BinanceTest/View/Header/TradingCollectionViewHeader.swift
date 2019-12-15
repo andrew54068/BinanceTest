@@ -9,7 +9,23 @@
 import UIKit
 import RainKit
 
+protocol TradingCollectionViewHeaderDelegate: AnyObject {
+    func selected(precision: Int)
+}
+
 final class TradingCollectionViewHeader: UICollectionReusableView {
+    
+    private var selections: [Int] = [] {
+        didSet {
+            selections.enumerated().forEach {
+                let button: UIButton = UIButton().title(String($1), for: .normal)
+                button.tag = $0
+                button.backgroundColor = .black
+                button.addTarget(self, action: #selector(precisionSelected), for: .touchUpInside)
+                selectionView.addArrangedSubview(button)
+            }
+        }
+    }
     
     private let fontSize: CGFloat = 15
     
@@ -24,6 +40,19 @@ final class TradingCollectionViewHeader: UICollectionReusableView {
         return button
     }()
     
+    lazy var selectionView: UIStackView = {
+        let stackView: UIStackView = UIStackView()
+        stackView.distribution = .fillEqually
+        stackView.alignment = .fill
+        stackView.axis = .vertical
+        stackView.isHidden = true
+        stackView.backgroundColor = .black
+        stackView.isUserInteractionEnabled = true
+        return stackView
+    }()
+    
+    weak var delegate: TradingCollectionViewHeaderDelegate?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
@@ -34,10 +63,16 @@ final class TradingCollectionViewHeader: UICollectionReusableView {
         setup()
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        selectionView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+    }
+    
     private func setup() {
         addSubview(bidTitleLabel)
         addSubview(askTitleLabel)
         addSubview(percisionBotton)
+        addSubview(selectionView)
         
         bidTitleLabel.anchor(\.leadingAnchor,
                              to: self.leadingAnchor,
@@ -60,8 +95,29 @@ final class TradingCollectionViewHeader: UICollectionReusableView {
         percisionBotton.anchor(\.bottomAnchor,
                                to: self.bottomAnchor)
         percisionBotton.anchor(\.trailingAnchor,
-                               to: self.trailingAnchor)
+                               to: self.trailingAnchor,
+                               constant: -15)
         
+        percisionBotton.anchor(\.widthAnchor, to: 70)
+        
+        percisionBotton.addTarget(self, action: #selector(showSelection), for: .touchUpInside)
+        
+        selectionView.anchor(\.topAnchor,
+                             to: percisionBotton.bottomAnchor)
+        selectionView.anchor(\.trailingAnchor,
+                             to: self.trailingAnchor,
+                             constant: -20)
+        selectionView.anchor(\.widthAnchor,
+                             to: 80)
+    }
+    
+    func setupBottonSelection(heighestPrecision: Int, currentSelected: Int) {
+        var selections: [Int] = []
+        for precision in 0...heighestPrecision {
+            selections.append(precision)
+        }
+        self.selections = Array(selections.reversed().prefix(4)).reversed()
+        percisionBotton.setTitle(String(currentSelected), for: .normal)
     }
     
     private func createTitleLabel(size: CGFloat) -> UILabel {
@@ -70,6 +126,14 @@ final class TradingCollectionViewHeader: UICollectionReusableView {
             .textColor(.systemGray)
             .backgroundColor(.clear)
             .numberOfLines(1)
+    }
+    
+    @objc func showSelection(_ sender: UIButton) {
+        selectionView.isHidden.toggle()
+    }
+    
+    @objc func precisionSelected(_ sender: UIButton) {
+        delegate?.selected(precision: sender.tag)
     }
     
 }

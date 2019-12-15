@@ -25,7 +25,8 @@ final class TradingViewModel {
     private var askOfferPool: [String: String] = [:]
     private var bidOfferPool: [String: String] = [:]
     
-    var precisionDigit: Int = 7
+    var precisionDigit: Int = 8
+    var precisionDigitSelected: Int = 8
     
     private lazy var priceFormatter: NumberFormatter = {
         let formatter: NumberFormatter = NumberFormatter()

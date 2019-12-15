@@ -29,6 +29,14 @@ final class TradingViewController: UIViewController {
         .dataSource(self)
         .backgroundColor(.black)
     
+    lazy var headerView: TradingCollectionViewHeader = {
+        let view: TradingCollectionViewHeader = TradingCollectionViewHeader()
+        view.setupBottonSelection(heighestPrecision: self.viewModel.precisionDigit,
+                                  currentSelected: self.viewModel.precisionDigitSelected)
+        view.backgroundColor = .black
+        return view
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -37,7 +45,17 @@ final class TradingViewController: UIViewController {
     
     private func setupView() {
         view.addSubview(collectionView)
-        collectionView.pinToSuper(edge: .zero)
+        view.addSubview(headerView)
+        
+        headerView.anchor(\.topAnchor, to: view.topAnchor)
+            .anchor(\.leadingAnchor, to: view.leadingAnchor)
+            .anchor(\.trailingAnchor, to: view.trailingAnchor)
+        
+        collectionView.anchor(\.topAnchor, to: headerView.bottomAnchor)
+            .anchor(\.leadingAnchor, to: view.leadingAnchor)
+            .anchor(\.trailingAnchor, to: view.trailingAnchor)
+            .anchor(\.bottomAnchor, to: view.bottomAnchor)
+        
         collectionView.register(TradingCollectionViewCell.self,
                                 forCellWithReuseIdentifier: TradingCollectionViewCell.className)
         collectionView.register(TradingCollectionViewHeader.self,
@@ -50,7 +68,9 @@ final class TradingViewController: UIViewController {
 extension TradingViewController: TradingViewModelDelegate {
     
     func ReceiveNewData() {
-        collectionView.reloadData()
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
     }
     
 }
@@ -69,29 +89,40 @@ extension TradingViewController: UICollectionViewDelegate, UICollectionViewDataS
         let cell: TradingCollectionViewCell = collectionView.dequeueReusableCell(with: TradingCollectionViewCell.self,
                                                                                  indexPath: indexPath)
         let offerModels: (bid: OfferModel?, ask: OfferModel?) = viewModel.offerModels(by: indexPath)
-        
+
         cell.update(bidModel: offerModels.bid,
                     askModel: offerModels.ask,
-                    precisionOrder: 4)
+                    precisionOrder: viewModel.precisionDigitSelected)
         return cell
     }
+
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+//        return CGSize(width: collectionView.bounds.width, height: cellHeight)
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+//        return .zero
+//    }
+//
+//    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+//        if kind == UICollectionView.elementKindSectionHeader {
+//            let header: TradingCollectionViewHeader = collectionView.dequeueReusableHeaderCell(with: TradingCollectionViewHeader.self,
+//                                                                                               indexPath: indexPath)
+//            header.setupBottonSelection(heighestPrecision: 8,
+//                                        currentSelected: viewModel.precisionDigitSelected)
+//            header.delegate = self
+//            return header
+//        } else {
+//            return UICollectionReusableView()
+//        }
+//    }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return CGSize(width: collectionView.bounds.width, height: cellHeight)
-    }
+}
+
+extension TradingViewController: TradingCollectionViewHeaderDelegate {
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        return .zero
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        if kind == UICollectionView.elementKindSectionHeader {
-            let header: TradingCollectionViewHeader = collectionView.dequeueReusableHeaderCell(with: TradingCollectionViewHeader.self,
-                                                                                               indexPath: indexPath)
-            return header
-        } else {
-            return UICollectionReusableView()
-        }
+    func selected(precision: Int) {
+        viewModel.precisionDigitSelected = precision
     }
     
 }

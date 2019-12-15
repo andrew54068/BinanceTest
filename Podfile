@@ -11,5 +11,6 @@ target 'BinanceTest' do
   pod 'Starscream', '~> 3.0.2'
   pod 'RainKit'
   pod 'Moya', '~> 12.0.1'
+  pod 'DNSPageView'
 
 end

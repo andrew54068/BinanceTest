@@ -8,16 +8,66 @@
 
 import UIKit
 import DNSPageView
+import Reachability
 
 final class TradingPageViewController: UIViewController {
     
+    lazy var reachability = try! Reachability()
+    
+    lazy var networkUnreachableBanner: UILabel = {
+        let view: UILabel = UILabel()
+        view.text = "Network Unreachable"
+        view.textColor = .white
+        view.backgroundColor = .systemRed
+        return view
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupNavigationBar()
+        
         view.backgroundColor = .black
-        setup()
+        setupViews()
+        setupNetworkUnreachableBanner()
+        
+        reachability.whenReachable = { reachability in
+            UIView.animate(withDuration: 0.3,
+                           delay: 0,
+                           options: .curveEaseInOut,
+                           animations: {
+                            self.networkUnreachableBanner.transform = CGAffineTransform(translationX: 0, y: -100)
+            }, completion: nil)
+        }
+        
+        reachability.whenUnreachable = { _ in
+            UIView.animate(withDuration: 0.3,
+                           delay: 0,
+                           options: .curveEaseInOut,
+                           animations: {
+                            self.networkUnreachableBanner.transform = CGAffineTransform.identity
+            }, completion: nil)
+        }
+
+        do {
+            try reachability.startNotifier()
+        } catch {
+            print("Unable to start notifier")
+        }
     }
     
-    private func setup() {
+    private func setupNavigationBar() {
+        title = "Binance"
+        extendedLayoutIncludesOpaqueBars = true
+        navigationController?.navigationBar.setBackgroundImage(nil, for: .default)
+        navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.barTintColor = .black
+        navigationController?.navigationBar.tintColor = .white
+        let textAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.titleTextAttributes = textAttributes
+        navigationController?.navigationBar.prefersLargeTitles = false
+    }
+    
+    private func setupViews() {
         let style: PageStyle = PageStyle()
         style.titleColor = .white
         style.titleSelectedColor = .systemYellow
@@ -49,6 +99,15 @@ final class TradingPageViewController: UIViewController {
                                           titles: titles,
                                           childViewControllers: children)
         view.addSubview(pageView)
+    }
+    
+    private func setupNetworkUnreachableBanner() {
+        view.addSubview(networkUnreachableBanner)
+        networkUnreachableBanner.anchor(\.topAnchor, to: view.safeAreaLayoutGuide.topAnchor)
+            .anchor(\.leadingAnchor, to: view.leadingAnchor)
+            .anchor(\.trailingAnchor, to: view.trailingAnchor)
+            .anchor(\.heightAnchor, to: 30)
+        networkUnreachableBanner.transform = CGAffineTransform(translationX: 0, y: -100)
     }
     
 }

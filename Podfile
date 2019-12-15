@@ -12,5 +12,6 @@ target 'BinanceTest' do
   pod 'RainKit'
   pod 'Moya', '~> 12.0.1'
   pod 'DNSPageView'
+  pod 'ReachabilitySwift'
 
 end

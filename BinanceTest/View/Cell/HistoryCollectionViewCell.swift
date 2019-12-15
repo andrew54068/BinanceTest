@@ -9,11 +9,6 @@
 import UIKit
 import RainKit
 
-enum TradeAction {
-    case buy
-    case sell
-}
-
 final class HistoryCollectionViewCell: UICollectionViewCell {
     
     private let fontSize: CGFloat = 15

@@ -31,6 +31,7 @@ final class TradingCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .clear
+        setupViews()
     }
     
     required init?(coder: NSCoder) {
@@ -40,7 +41,6 @@ final class TradingCollectionViewCell: UICollectionViewCell {
     func update(bidModel: OfferModel?, askModel: OfferModel?, precisionOrder: Int) {
         addLayers(bidQuantity: bidModel?.quantity ?? "0",
                   askQuantity: askModel?.quantity ?? "0")
-        setupViews()
         self.precisionOrder = precisionOrder
         bidQuantityLabel.text = bidModel?.quantity
         bidPriceLabel.text = bidModel?.price

@@ -140,7 +140,6 @@ final class TradingViewModel {
     }
     
     func offerModels(by indexPath: IndexPath) -> (bid: OfferModel?, ask: OfferModel?) {
-        mergedModel = getOfferTuple(by: precisionDigit)
         return (mergedModel.bids[safe: indexPath.item], mergedModel.asks[safe: indexPath.item])
     }
     
@@ -158,16 +157,13 @@ extension TradingViewModel: WebSocketDelegate {
     
     func websocketDidReceiveMessage(socket: WebSocketClient, text: String) {
         if let data: Data = text.data(using: .utf8),
-            let jsonObject: Any = try? JSONSerialization.jsonObject(with: data, options: []),
-            let jsonData: Data = try? JSONSerialization.data(withJSONObject: jsonObject, options: .prettyPrinted),
-            let depthStreamModel: DepthStreamModel = try? JSONDecoder().decode(DepthStreamModel.self, from: jsonData) {
-            DispatchQueue.main.async {
-                if self.mergedModel.asks.count + self.mergedModel.bids.count == 0 {
-                    self.streamModels.append(depthStreamModel)
-                } else {
-                    self.updatePool(with: depthStreamModel)
-                    self.delegate?.ReceiveNewData()
-                }
+            let depthStreamModel: DepthStreamModel = try? JSONDecoder().decode(DepthStreamModel.self, from: data) {
+            if self.mergedModel.asks.count + self.mergedModel.bids.count == 0 {
+                self.streamModels.append(depthStreamModel)
+            } else {
+                self.updatePool(with: depthStreamModel)
+                self.mergedModel = self.getOfferTuple(by: self.precisionDigit)
+                self.delegate?.ReceiveNewData()
             }
         }
     }

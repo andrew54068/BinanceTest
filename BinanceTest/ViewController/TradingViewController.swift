@@ -14,9 +14,11 @@ final class TradingViewController: UIViewController {
     
     lazy var viewModel: TradingViewModel = TradingViewModel()
     
+    private let cellHeight: CGFloat = 30
+    
     private lazy var layout: UICollectionViewFlowLayout = UICollectionViewFlowLayout()
         .itemSize(CGSize(width: view.bounds.width,
-                         height: 30))
+                         height: cellHeight))
         .scrollDirection(.vertical)
         .minimumLineSpacing(0)
         .minimumInteritemSpacing(0)
@@ -38,6 +40,9 @@ final class TradingViewController: UIViewController {
         collectionView.pinToSuper(edge: .zero)
         collectionView.register(TradingCollectionViewCell.self,
                                 forCellWithReuseIdentifier: TradingCollectionViewCell.className)
+        collectionView.register(TradingCollectionViewHeader.self,
+                                forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter,
+                                withReuseIdentifier: TradingCollectionViewHeader.className)
     }
     
 }
@@ -50,7 +55,7 @@ extension TradingViewController: TradingViewModelDelegate {
     
 }
 
-extension TradingViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+extension TradingViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -69,6 +74,24 @@ extension TradingViewController: UICollectionViewDelegate, UICollectionViewDataS
                     askModel: offerModels.ask,
                     precisionOrder: 4)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.bounds.width, height: cellHeight)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        return .zero
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        if kind == UICollectionView.elementKindSectionHeader {
+            let header: TradingCollectionViewHeader = collectionView.dequeueReusableHeaderCell(with: TradingCollectionViewHeader.self,
+                                                                                               indexPath: indexPath)
+            return header
+        } else {
+            return UICollectionReusableView()
+        }
     }
     
 }

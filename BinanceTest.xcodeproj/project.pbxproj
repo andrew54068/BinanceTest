@@ -13,6 +13,7 @@
 		C111440A239D39B7009854A8 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C1114408239D39B7009854A8 /* Main.storyboard */; };
 		C111440C239D39B8009854A8 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C111440B239D39B8009854A8 /* Assets.xcassets */; };
 		C111440F239D39B8009854A8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C111440D239D39B8009854A8 /* LaunchScreen.storyboard */; };
+		C14247D423A5E5D300E73DAA /* TradingCollectionViewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C14247D323A5E5D300E73DAA /* TradingCollectionViewHeader.swift */; };
 		C1FBAF6E239D3CB8005A70B8 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FBAF6D239D3CB8005A70B8 /* Model.swift */; };
 		C1FBAF70239D4617005A70B8 /* ArrayExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FBAF6F239D4617005A70B8 /* ArrayExtension.swift */; };
 		C1FBAF72239D4A28005A70B8 /* TradingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FBAF71239D4A28005A70B8 /* TradingViewModel.swift */; };
@@ -37,6 +38,7 @@
 		C111440B239D39B8009854A8 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C111440E239D39B8009854A8 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C1114410239D39B8009854A8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C14247D323A5E5D300E73DAA /* TradingCollectionViewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradingCollectionViewHeader.swift; sourceTree = "<group>"; };
 		C1FBAF6D239D3CB8005A70B8 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		C1FBAF6F239D4617005A70B8 /* ArrayExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArrayExtension.swift; sourceTree = "<group>"; };
 		C1FBAF71239D4A28005A70B8 /* TradingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TradingViewModel.swift; sourceTree = "<group>"; };
@@ -112,6 +114,14 @@
 			path = BinanceTest;
 			sourceTree = "<group>";
 		};
+		C14247D523A5E8CF00E73DAA /* Header */ = {
+			isa = PBXGroup;
+			children = (
+				C14247D323A5E5D300E73DAA /* TradingCollectionViewHeader.swift */,
+			);
+			path = Header;
+			sourceTree = "<group>";
+		};
 		C1FBAF79239D4F20005A70B8 /* Cell */ = {
 			isa = PBXGroup;
 			children = (
@@ -123,6 +133,7 @@
 		C1FBAF7A239D4F28005A70B8 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				C14247D523A5E8CF00E73DAA /* Header */,
 				C1FBAF79239D4F20005A70B8 /* Cell */,
 			);
 			path = View;
@@ -308,6 +319,7 @@
 				C1FBAF70239D4617005A70B8 /* ArrayExtension.swift in Sources */,
 				C1FBAF84239D65D4005A70B8 /* WebService.swift in Sources */,
 				C1FBAF76239D4EC8005A70B8 /* NSObject+ClassName.swift in Sources */,
+				C14247D423A5E5D300E73DAA /* TradingCollectionViewHeader.swift in Sources */,
 				C1FBAF86239D6A2E005A70B8 /* MoyaTarget.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
